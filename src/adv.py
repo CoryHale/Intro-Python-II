@@ -1,4 +1,5 @@
 from room import Room
+from player import Player
 
 # Declare all the rooms
 
@@ -24,14 +25,14 @@ earlier adventurers. The only exit is to the south."""),
 
 # Link rooms together
 
-room['outside'].n_to = room['foyer']
-room['foyer'].s_to = room['outside']
-room['foyer'].n_to = room['overlook']
-room['foyer'].e_to = room['narrow']
-room['overlook'].s_to = room['foyer']
-room['narrow'].w_to = room['foyer']
-room['narrow'].n_to = room['treasure']
-room['treasure'].s_to = room['narrow']
+room['outside'].n_to = 'foyer'
+room['foyer'].n_to = 'overlook'
+room['foyer'].e_to = 'narrow'
+room['foyer'].s_to = 'outside'
+room['overlook'].s_to = 'foyer'
+room['narrow'].w_to = 'foyer'
+room['narrow'].n_to = 'treasure'
+room['treasure'].s_to = 'narrow'
 
 #
 # Main
@@ -39,13 +40,64 @@ room['treasure'].s_to = room['narrow']
 
 # Make a new player object that is currently in the 'outside' room.
 
+my_player = Player("outside")
+
 # Write a loop that:
-#
+
+playing = True
+
+while playing:
+
 # * Prints the current room name
+
+    cur_room = my_player.current_room
+    print(room[cur_room].name)
+
 # * Prints the current description (the textwrap module might be useful here).
+
+    print(room[cur_room].description)
+
 # * Waits for user input and decides what to do.
-#
+
+    dir = input("Enter a direction: ").lower().strip()
+
 # If the user enters a cardinal direction, attempt to move to the room there.
 # Print an error message if the movement isn't allowed.
-#
+
+    if dir == "n":
+        if room[cur_room].n_to != None:
+            my_player.current_room = room[cur_room].n_to
+
+        else:
+            print("You cannot move this direction. Try Again.")
+            
+    elif dir == "e":
+        if room[cur_room].e_to != None:
+            my_player.current_room = room[cur_room].e_to
+
+        else:
+            print("You cannot move this direction. Try Again.")
+
+    elif dir == "s":
+        if room[cur_room].s_to != None:
+            my_player.current_room = room[cur_room].s_to
+
+        else:
+            print("You cannot move this direction. Try Again.")
+
+    elif dir == "w":
+        if room[cur_room].w_to != None:
+            my_player.current_room = room[cur_room].w_to
+
+        else:
+            print("You cannot move this direction. Try Again.")
+
+    elif dir == "q":
+        print("Thank you for playing the game! Hope to see you soon!")
+        playing = False
+
+
+
 # If the user enters "q", quit the game.
+
+
